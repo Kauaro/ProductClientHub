@@ -5,12 +5,12 @@ namespace ProductClientHub.API.Infrastructure
 {
     public class ProductClientHubDbContext : DbContext
     {
-        public DbSet<Client> Clients { get; set; } = default!;
-        public DbSet<Product> Products { get; set; } = default!;
+        public DbSet<Usuario> Usuario { get; set; } = default!;
+        public DbSet<Projeto> Projeto { get; set; } = default!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Data Source=C:\\Projetos\\C#\\Curso\\ProductClientHub.db.octet-stream");
+            optionsBuilder.UseSqlite("Data Source=C:\\Projetos\\C#\\API_SLA\\BDSLA.db");
         }
     }
 }
