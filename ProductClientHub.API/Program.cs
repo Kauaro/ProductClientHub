@@ -3,13 +3,23 @@ using ProductClientHub.API.Filters;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddMvc(option => option.Filters.Add(typeof(ExceptionFilter)));
+
+// 🔹 Configurando o CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5173")
+                  .AllowAnyMethod()
+                  .AllowAnyHeader();
+        });
+});
 
 var app = builder.Build();
 
@@ -19,8 +29,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+else
+{
+    app.UseHttpsRedirection(); // só fora do dev
+}
 
-app.UseHttpsRedirection();
+// 🔹 Ativando o CORS antes do Authorization
+app.UseCors("AllowFrontend");
 
 app.UseAuthorization();
 
