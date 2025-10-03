@@ -3,6 +3,7 @@ using ProductClientHub.API.UseCases.Products.Delete;
 using ProductClientHub.API.UseCases.Products.Register;
 using ProductClientHub.Communication.Requests;
 using ProductClientHub.Communication.Responses;
+using System;
 
 namespace ProductClientHub.API.Controllers
 {
@@ -10,30 +11,27 @@ namespace ProductClientHub.API.Controllers
     [ApiController]
     public class ProjetoController : ControllerBase
     {
-        [HttpPost]
-        [Route("{clientId}")]
+        [HttpPost("{usuarioId}")]
         [ProducesResponseType(typeof(ResponseShortProjetoJson), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ResponseErrorMessageJson), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ResponseErrorMessageJson), StatusCodes.Status404NotFound)]
-        public IActionResult Register([FromRoute] Guid clientId, [FromBody] RequestProjetoJson request)
+        public IActionResult Register(
+            [FromRoute] Guid usuarioId,
+            [FromBody] RequestProjetoJson request,
+            [FromServices] RegisterProjetoUseCase useCase) // ✅ UseCase injetado
         {
-            var useCase = new RegisterProjetoUseCase();
-
-            var reponse = useCase.Execute(clientId, request);
-
-            return Created(string.Empty, reponse);
+            var response = useCase.Execute(usuarioId, request);
+            return Created(string.Empty, response);
         }
 
-        [HttpDelete]
-        [Route("{id}")]
+        [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(ResponseErrorMessageJson), StatusCodes.Status404NotFound)]
-        public IActionResult Delete([FromRoute] Guid id)
+        public IActionResult Delete(
+            [FromRoute] Guid id,
+            [FromServices] DeleteProjetoUseCase useCase) // ✅ UseCase injetado
         {
-            var useCase = new DeleteProjetoUseCase();
-
             useCase.Execute(id);
-
             return NoContent();
         }
     }

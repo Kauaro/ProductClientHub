@@ -1,21 +1,27 @@
 ﻿using FluentValidation.Results;
-using Microsoft.AspNetCore.Authentication;
 using ProductClientHub.API.Entities;
 using ProductClientHub.API.Infrastructure;
 using ProductClientHub.API.UseCases.Products.SharedValidator;
 using ProductClientHub.Communication.Requests;
 using ProductClientHub.Communication.Responses;
 using ProductClientHub.Exceptions.ExceptionBase;
+using System.Linq;
 
 namespace ProductClientHub.API.UseCases.Products.Register
 {
     public class RegisterProjetoUseCase
     {
+        private readonly ProductClientHubDbContext _context;
+
+        public RegisterProjetoUseCase(ProductClientHubDbContext context)
+        {
+            _context = context;
+        }
+
         public ResponseShortProjetoJson Execute(Guid usuarioId, RequestProjetoJson request)
         {
-            var dbContext = new ProductClientHubDbContext();
-
-            Validate(dbContext, usuarioId, request);
+            // ✅ Usa o DbContext injetado
+            Validate(usuarioId, request);
 
             var entity = new Projeto
             {
@@ -26,9 +32,8 @@ namespace ProductClientHub.API.UseCases.Products.Register
                 UsuarioId = usuarioId
             };
 
-            dbContext.Projeto.Add(entity);
-
-            dbContext.SaveChanges();
+            _context.Projeto.Add(entity);
+            _context.SaveChanges();
 
             return new ResponseShortProjetoJson
             {
@@ -37,20 +42,19 @@ namespace ProductClientHub.API.UseCases.Products.Register
             };
         }
 
-        private void Validate(ProductClientHubDbContext dbContext, Guid usuarioId, RequestProjetoJson request)
+        private void Validate(Guid usuarioId, RequestProjetoJson request)
         {
-            var usuarioExist = dbContext.Usuario.Any(usuario => usuario.Id == usuarioId);
-            if (usuarioExist == false)
-                throw new NotFoundException("Usuario não existe");
+            // ✅ Usa o DbContext injetado
+            var usuarioExist = _context.Usuario.Any(usuario => usuario.Id == usuarioId);
+            if (!usuarioExist)
+                throw new NotFoundException("Usuário não existe");
 
             var validator = new RequestProjetoValidator();
-
             var result = validator.Validate(request);
 
-            if (result.IsValid == false)
+            if (!result.IsValid)
             {
                 var errors = result.Errors.Select(failure => failure.ErrorMessage).ToList();
-
                 throw new ErrorOnValidationException(errors);
             }
         }

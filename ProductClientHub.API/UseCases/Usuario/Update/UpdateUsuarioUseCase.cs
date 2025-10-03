@@ -1,4 +1,5 @@
-﻿using ProductClientHub.API.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using ProductClientHub.API.Entities;
 using ProductClientHub.API.Infrastructure;
 using ProductClientHub.API.UseCases.Clients.SharedValidator;
 using ProductClientHub.Communication.Requests;
@@ -8,14 +9,19 @@ namespace ProductClientHub.API.UseCases.Clients.Update
 {
     public class UpdateUsuarioUseCase
     {
+        private readonly ProductClientHubDbContext _context;
+        public UpdateUsuarioUseCase(ProductClientHubDbContext context)
+        {
+            _context = context;
+        }
+
         public void Execute(Guid usuarioId, RequestUsuarioJson request)
         {
             Validate(request);
 
-            var dbContext = new ProductClientHubDbContext();
+            var usuario = _context.Usuario.ToList();
 
-
-            var entity =dbContext.Usuario.FirstOrDefault(usuario => usuario.Id == usuarioId);
+            var entity =_context.Usuario.FirstOrDefault(usuario => usuario.Id == usuarioId);
             if (entity is null)
                 throw new NotFoundException("Usuario não encontrado.");
 
@@ -23,9 +29,10 @@ namespace ProductClientHub.API.UseCases.Clients.Update
             entity.Email = request.Email;
             entity.Senha = request.Senha;
             entity.Matricula = request.Matricula;
+            entity.NivelAcesso = request.NivelAcesso;
 
-            dbContext.Usuario.Update(entity);
-            dbContext.SaveChanges();
+            _context.Usuario.Update(entity);
+            _context.SaveChanges();
         }
 
         private void Validate(RequestUsuarioJson request)

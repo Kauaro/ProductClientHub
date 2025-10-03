@@ -1,13 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ProductClientHub.API.Infrastructure;
 using ProductClientHub.API.UseCases.Clients.Delete;
 using ProductClientHub.API.UseCases.Clients.GetAll;
 using ProductClientHub.API.UseCases.Clients.GetClient;
 using ProductClientHub.API.UseCases.Clients.Register;
 using ProductClientHub.API.UseCases.Clients.Update;
-using ProductClientHub.API.UseCases.Products.Delete;
 using ProductClientHub.Communication.Requests;
 using ProductClientHub.Communication.Responses;
 using ProductClientHub.Exceptions.ExceptionBase;
+using SLAProjectHub.Communication.Requests;
+using SLAProjectHub.Communication.Responses;
 
 namespace ProductClientHub.API.Controllers
 {
@@ -15,29 +17,45 @@ namespace ProductClientHub.API.Controllers
     [ApiController]
     public class UsuarioController : ControllerBase
     {
+        private readonly ProductClientHubDbContext _context;
+        private readonly RegisterUsuarioUseCase _register;
+        private readonly UpdateUsuarioUseCase _update;
+        private readonly GetAllUsuarioUseCase _getAll;
+        private readonly GetUsuarioByIdUseCase _getById;
+        private readonly DeleteUsuarioUseCase _delete;
+
+        public UsuarioController(
+            ProductClientHubDbContext context,
+            RegisterUsuarioUseCase register,
+            UpdateUsuarioUseCase update,
+            GetAllUsuarioUseCase getAll,
+            GetUsuarioByIdUseCase getById,
+            DeleteUsuarioUseCase delete)
+        {
+            _context = context;
+            _register = register;
+            _update = update;
+            _getAll = getAll;
+            _getById = getById;
+            _delete = delete;
+        }
+
         [HttpPost]
         [ProducesResponseType(typeof(ResponseShortUsuarioJson), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ResponseErrorMessageJson), StatusCodes.Status400BadRequest)]
         public IActionResult Register([FromBody] RequestUsuarioJson request)
         {
-            var useCase = new RegisterUsuarioUseCase();
-
-            var reponse = useCase.Execute(request);
-
-            return Created(string.Empty, reponse);
+            var response = _register.Execute(request);
+            return Created(string.Empty, response);
         }
 
-        [HttpPut]
-        [Route("{id}")]
+        [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(ResponseErrorMessageJson), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ResponseErrorMessageJson), StatusCodes.Status404NotFound)]
         public IActionResult Update([FromRoute] Guid id, [FromBody] RequestUsuarioJson request)
         {
-            var useCase = new UpdateUsuarioUseCase();
-
-            useCase.Execute(id, request);
-
+            _update.Execute(id, request);
             return NoContent();
         }
 
@@ -46,41 +64,53 @@ namespace ProductClientHub.API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public IActionResult GetAll()
         {
-            var useCase = new GetAllUsuarioUseCase();
-
-            var response = useCase.Execute();
-
-            if(response.Usuario.Count == 0)
+            var response = _getAll.Execute();
+            if (response.Usuario.Count == 0)
                 return NoContent();
 
             return Ok(response);
         }
 
-
-        [HttpGet]
-        [Route("{id}")]
+        [HttpGet("{id}")]
         [ProducesResponseType(typeof(ResponseAllUsuarioJson), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public IActionResult GetById([FromRoute] Guid id)
         {
-            var useCase = new GetUsuarioByIdUseCase();
-
-            var response = useCase.Execute(id);
-
+            var response = _getById.Execute(id);
             return Ok(response);
         }
 
-        [HttpDelete]
-        [Route("{id}")]
+        [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(ResponseErrorMessageJson), StatusCodes.Status404NotFound)]
         public IActionResult Delete([FromRoute] Guid id)
         {
-            var useCase = new DeleteUsuarioUseCase();
-
-            useCase.Execute(id);
-
+            _delete.Execute(id);
             return NoContent();
         }
+
+        [HttpPost("login")]
+        public IActionResult Login([FromBody] RequestLoginJson request)
+        {
+            var usuario = _context.Usuario
+                .FirstOrDefault(u => u.Matricula == request.Matricula && u.Senha == request.Senha);
+
+            if (usuario == null)
+            {
+                return Unauthorized(new { message = "Matrícula ou senha inválidos." });
+            }
+
+            // Retorna dados importantes do usuário
+            return Ok(new
+            {
+                message = "Login realizado com sucesso!",
+                id = usuario.Id,
+                nome = usuario.Nome,
+                matricula = usuario.Matricula,
+                role = usuario.NivelAcesso, 
+                projetos = new string[] { } 
+            });
+        }
+
     }
 }

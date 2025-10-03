@@ -9,13 +9,18 @@ namespace ProductClientHub.API.UseCases.Clients.Register
 {
     public class RegisterUsuarioUseCase
     {
+        private readonly ProductClientHubDbContext _context;
+        public RegisterUsuarioUseCase(ProductClientHubDbContext context)
+        {
+            _context = context;
+        }
 
         public ResponseShortUsuarioJson Execute(RequestUsuarioJson request) 
         {
            
             Validate(request);
 
-            var dbContext = new ProductClientHubDbContext();
+            var usuario = _context.Usuario.ToList();
 
             var entity = new Usuario
             {
@@ -23,18 +28,20 @@ namespace ProductClientHub.API.UseCases.Clients.Register
                 Email = request.Email,
                 Matricula = request.Matricula,
                 Senha = request.Senha,
+                NivelAcesso = request.NivelAcesso,
 
             };
 
-            dbContext.Usuario.Add(entity);
+            _context.Usuario.Add(entity);
 
-            dbContext.SaveChanges();
+            _context.SaveChanges();
 
 
             return new ResponseShortUsuarioJson
             {
-                Id = entity.Id,
+                Matricula = entity.Matricula,
                 Nome = entity.Nome,
+                NivelAcesso = entity.NivelAcesso,
             };
         }
 

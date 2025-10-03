@@ -5,17 +5,21 @@ namespace ProductClientHub.API.UseCases.Products.Delete
 {
     public class DeleteProjetoUseCase
     {
+        private readonly ProductClientHubDbContext _context;
+        public DeleteProjetoUseCase(ProductClientHubDbContext context)
+        {
+            _context = context;
+        }
+
         public void Execute(Guid id)
         {
-            var dbContext = new ProductClientHubDbContext();
+            var entity = _context.Projeto.FirstOrDefault(projeto => projeto.Id == id);
 
-            var entity = dbContext.Projeto.FirstOrDefault(product => product.Id == id);
             if (entity is null)
                 throw new NotFoundException("Projeto não encontrado");
 
-            dbContext.Projeto.Remove(entity);
-
-            dbContext.SaveChanges();
+            _context.Projeto.Remove(entity);
+            _context.SaveChanges();
         }
     }
 }

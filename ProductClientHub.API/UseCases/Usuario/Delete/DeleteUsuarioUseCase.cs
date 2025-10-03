@@ -5,17 +5,21 @@ namespace ProductClientHub.API.UseCases.Clients.Delete
 {
     public class DeleteUsuarioUseCase
     {
+        private readonly ProductClientHubDbContext _context;
+        public DeleteUsuarioUseCase(ProductClientHubDbContext context)
+        {
+            _context = context;
+        }
+
         public void Execute(Guid id)
         {
-            var dbContext = new ProductClientHubDbContext();
+            var entity = _context.Usuario.FirstOrDefault(usuario => usuario.Id == id);
 
-            var entity = dbContext.Usuario.FirstOrDefault(usuario => usuario.Id == id);
             if (entity is null)
-                throw new NotFoundException("Usuario não encontrado");
+                throw new NotFoundException("Usuário não encontrado");
 
-            dbContext.Usuario.Remove(entity);
-
-            dbContext.SaveChanges();
+            _context.Usuario.Remove(entity);
+            _context.SaveChanges();
         }
     }
 }

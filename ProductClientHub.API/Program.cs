@@ -1,11 +1,32 @@
+﻿using Microsoft.EntityFrameworkCore;
 using ProductClientHub.API.Filters;
+using ProductClientHub.API.Infrastructure;
+using ProductClientHub.API.UseCases.Clients.Delete;
+using ProductClientHub.API.UseCases.Clients.GetAll;
+using ProductClientHub.API.UseCases.Clients.GetClient;
+using ProductClientHub.API.UseCases.Clients.Register;
+using ProductClientHub.API.UseCases.Clients.Update;
+using ProductClientHub.API.UseCases.Products.Delete;
+using ProductClientHub.API.UseCases.Products.Register;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<ProductClientHubDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<RegisterUsuarioUseCase>();
+builder.Services.AddScoped<UpdateUsuarioUseCase>();
+builder.Services.AddScoped<GetAllUsuarioUseCase>();
+builder.Services.AddScoped<GetUsuarioByIdUseCase>();
+builder.Services.AddScoped<DeleteUsuarioUseCase>();
+builder.Services.AddScoped<RegisterProjetoUseCase>();
+builder.Services.AddScoped<DeleteProjetoUseCase>();
+
 
 builder.Services.AddMvc(option => option.Filters.Add(typeof(ExceptionFilter)));
 
