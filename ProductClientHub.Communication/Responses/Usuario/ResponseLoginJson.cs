@@ -1,4 +1,4 @@
-﻿namespace SLAProjectHub.Communication.Responses
+﻿namespace SLAProjectHub.Communication.Responses.Usuario
 {
     public class ResponseLoginJson
     {

@@ -1,9 +1,9 @@
-﻿using ProductClientHub.API.Entities;
+﻿using SLAProjectHub.API.Entities;
 using ProductClientHub.API.Infrastructure;
 using ProductClientHub.API.UseCases.Clients.SharedValidator;
 using ProductClientHub.Communication.Requests;
-using ProductClientHub.Communication.Responses;
 using ProductClientHub.Exceptions.ExceptionBase;
+using SLAProjectHub.Communication.Responses.Usuario;
 
 namespace ProductClientHub.API.UseCases.Clients.Register
 {

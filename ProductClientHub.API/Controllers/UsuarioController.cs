@@ -10,6 +10,7 @@ using ProductClientHub.Communication.Responses;
 using ProductClientHub.Exceptions.ExceptionBase;
 using SLAProjectHub.Communication.Requests;
 using SLAProjectHub.Communication.Responses;
+using SLAProjectHub.Communication.Responses.Usuario;
 
 namespace ProductClientHub.API.Controllers
 {

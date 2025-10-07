@@ -1,10 +1,10 @@
 ﻿using FluentValidation.Results;
-using ProductClientHub.API.Entities;
+using SLAProjectHub.API.Entities;
 using ProductClientHub.API.Infrastructure;
 using ProductClientHub.API.UseCases.Products.SharedValidator;
 using ProductClientHub.Communication.Requests;
-using ProductClientHub.Communication.Responses;
 using ProductClientHub.Exceptions.ExceptionBase;
+using SLAProjectHub.Communication.Responses.Projeto;
 using System.Linq;
 
 namespace ProductClientHub.API.UseCases.Products.Register
@@ -12,6 +12,9 @@ namespace ProductClientHub.API.UseCases.Products.Register
     public class RegisterProjetoUseCase
     {
         private readonly ProductClientHubDbContext _context;
+
+        private static readonly object _lock = new object();
+
 
         public RegisterProjetoUseCase(ProductClientHubDbContext context)
         {
@@ -32,8 +35,12 @@ namespace ProductClientHub.API.UseCases.Products.Register
                 UsuarioId = usuarioId
             };
 
-            _context.Projeto.Add(entity);
-            _context.SaveChanges();
+            lock (_lock)
+            {
+                _context.Projeto.Add(entity);
+                _context.SaveChanges();
+            }
+
 
             return new ResponseShortProjetoJson
             {

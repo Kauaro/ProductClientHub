@@ -1,4 +1,4 @@
-﻿namespace ProductClientHub.Communication.Responses
+﻿namespace SLAProjectHub.Communication.Responses.Usuario
 {
     public class ResponseAllUsuarioJson
     {

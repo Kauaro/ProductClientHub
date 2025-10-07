@@ -1,4 +1,6 @@
-﻿namespace ProductClientHub.Communication.Responses
+﻿using SLAProjectHub.Communication.Responses.Projeto;
+
+namespace SLAProjectHub.Communication.Responses.Usuario
 {
     public class ResponseUsuarioJson
     {

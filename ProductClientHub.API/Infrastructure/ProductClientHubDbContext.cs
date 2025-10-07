@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ProductClientHub.API.Entities;
+using SLAProjectHub.API.Entities;
 
 namespace ProductClientHub.API.Infrastructure
 {
@@ -12,6 +12,8 @@ namespace ProductClientHub.API.Infrastructure
 
         public DbSet<Usuario> Usuario { get; set; } = default!;
         public DbSet<Projeto> Projeto { get; set; } = default!;
+        public DbSet<Aluno> Aluno { get; set; } = default!;
+
 
         // Opcional: se quiser ainda usar OnConfiguring como fallback
         // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

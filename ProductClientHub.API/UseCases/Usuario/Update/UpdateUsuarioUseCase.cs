@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ProductClientHub.API.Entities;
+using SLAProjectHub.API.Entities;
 using ProductClientHub.API.Infrastructure;
 using ProductClientHub.API.UseCases.Clients.SharedValidator;
 using ProductClientHub.Communication.Requests;

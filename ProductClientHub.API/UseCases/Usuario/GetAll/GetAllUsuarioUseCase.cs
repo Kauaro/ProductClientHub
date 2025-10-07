@@ -1,5 +1,6 @@
 ﻿using ProductClientHub.API.Infrastructure;
 using ProductClientHub.Communication.Responses;
+using SLAProjectHub.Communication.Responses.Usuario;
 
 namespace ProductClientHub.API.UseCases.Clients.GetAll
 {

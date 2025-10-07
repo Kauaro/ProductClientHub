@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ProductClientHub.API.Entities;
 using ProductClientHub.API.Infrastructure;
-using ProductClientHub.Communication.Responses;
 using ProductClientHub.Exceptions.ExceptionBase;
+using SLAProjectHub.Communication.Responses.Projeto;
+using SLAProjectHub.Communication.Responses.Usuario;
 
 namespace ProductClientHub.API.UseCases.Clients.GetClient
 {

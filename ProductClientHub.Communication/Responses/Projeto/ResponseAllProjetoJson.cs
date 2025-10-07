@@ -1,6 +1,4 @@
-﻿using ProductClientHub.Communication.Responses;
-
-namespace SLAProjectHub.Communication.Responses
+﻿namespace SLAProjectHub.Communication.Responses.Projeto
 {
     public class ResponseAllProjetoJson
     {

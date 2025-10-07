@@ -1,4 +1,4 @@
-﻿namespace ProductClientHub.API.Entities
+﻿namespace SLAProjectHub.API.Entities
 {
     public abstract class EntityBase
     {

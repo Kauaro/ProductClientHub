@@ -1,8 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ProductClientHub.API.Infrastructure;
 using ProductClientHub.API.UseCases.Products.Delete;
 using ProductClientHub.API.UseCases.Products.Register;
 using ProductClientHub.Communication.Requests;
 using ProductClientHub.Communication.Responses;
+using SLAProjectHub.API.UseCases.Aluno.GetAll;
+using SLAProjectHub.API.UseCases.Aluno.Register;
+using SLAProjectHub.API.UseCases.Projeto.GetAll;
+using SLAProjectHub.API.UseCases.Projeto.GetById;
+using SLAProjectHub.Communication.Responses.Projeto;
+using SLAProjectHub.Communication.Responses.Usuario;
 using System;
 
 namespace ProductClientHub.API.Controllers
@@ -11,6 +18,23 @@ namespace ProductClientHub.API.Controllers
     [ApiController]
     public class ProjetoController : ControllerBase
     {
+        private readonly ProductClientHubDbContext _context;
+        private readonly RegisterProjetoUseCase _register;
+        private readonly GetAllProjetosUseCase _getAll;
+        private readonly GetByIdProjetoUseCase _getById;
+        public ProjetoController(
+            ProductClientHubDbContext context,
+            RegisterProjetoUseCase register,
+            GetAllProjetosUseCase getall,
+            GetByIdProjetoUseCase getbyid
+            )
+        {
+            _context = context;
+            _register = register;
+            _getAll = getall;
+            _getById = getbyid;
+        }
+
         [HttpPost("{usuarioId}")]
         [ProducesResponseType(typeof(ResponseShortProjetoJson), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ResponseErrorMessageJson), StatusCodes.Status400BadRequest)]
@@ -33,6 +57,29 @@ namespace ProductClientHub.API.Controllers
         {
             useCase.Execute(id);
             return NoContent();
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(ResponseAllUsuarioJson), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public IActionResult GetAll(
+            [FromServices] GetAllProjetosUseCase useCase
+            )
+        {
+            var response = useCase.Execute();
+            if (response.Projeto.Count == 0)
+                return NoContent();
+
+            return Ok(response);
+        }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(ResponseAllProjetoJson), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public IActionResult GetById([FromRoute] Guid id)
+        {
+            var response = _getById.Execute(id);
+            return Ok(response);
         }
     }
 }

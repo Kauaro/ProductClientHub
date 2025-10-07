@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using ProductClientHub.API.Entities;
+using SLAProjectHub.API.Entities;
 using ProductClientHub.Communication.Requests;
 
 namespace ProductClientHub.API.UseCases.Clients.SharedValidator
