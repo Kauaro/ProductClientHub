@@ -15,7 +15,6 @@ namespace ProductClientHub.API.UseCases.Products.Register
 
         private static readonly object _lock = new object();
 
-
         public RegisterProjetoUseCase(ProductClientHubDbContext context)
         {
             _context = context;
