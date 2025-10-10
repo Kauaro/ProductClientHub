@@ -4,8 +4,12 @@
     {
         public string Nome { get; set; } = string.Empty;
         public string Descricao { get; set; } = string.Empty;
-        public double Nota { get; set; } = 0.0;
-        public Guid ProjetoId { get; set; }
-        public Guid AlunoMatricula { get; set; }
+        public int Nota { get; set; } = 0;
+
+        public Projeto Projeto { get; set; } = null!;
+        public string ProjetoCodigo { get; set; } = string.Empty;
+
+        public Aluno Aluno { get; set; } = null!;
+        public string AlunoMatricula { get; set; } = string.Empty;
     }
 }

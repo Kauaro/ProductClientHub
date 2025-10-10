@@ -10,14 +10,18 @@ using ProductClientHub.API.UseCases.Products.Delete;
 using ProductClientHub.API.UseCases.Products.Register;
 using SLAProjectHub.API.UseCases.Aluno.GetAll;
 using SLAProjectHub.API.UseCases.Aluno.Register;
+using SLAProjectHub.API.UseCases.Avaliacao.GetAll;
+using SLAProjectHub.API.UseCases.Avaliacao.Register;
 using SLAProjectHub.API.UseCases.Projeto.GetAll;
 using SLAProjectHub.API.UseCases.Projeto.GetById;
+using SLAProjectHub.API.UseCases.Projeto.Register;
 using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ProductClientHubDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -34,29 +38,19 @@ builder.Services.AddScoped<GetByIdProjetoUseCase>();
 builder.Services.AddScoped<RegisterProjetoUseCase>();
 builder.Services.AddScoped<DeleteProjetoUseCase>();
 
+builder.Services.AddScoped<ProjetoCodigoService>();
+
+
 builder.Services.AddScoped<RegisterAluno>();
 builder.Services.AddScoped<GetAllAluno>();
+
+builder.Services.AddScoped<GetAllAvaliacaoUseCase>();
+builder.Services.AddScoped<RegisterAvaliacaoUseCase>();
 
 
 builder.Services.AddMvc(option => option.Filters.Add(typeof(ExceptionFilter)));
 
-/*
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowFrontend",
-        policy =>
-        {
-            policy.WithOrigins(
-                "http://localhost:5173",
-                "http://localhost:52557",
-                "http://localhost:53301",
-                "http://localhost:54625"
-            )
-                  .AllowAnyMethod()
-                  .AllowAnyHeader();
-        });
-});
-*/
+
 
 builder.Services.AddCors(options =>
 {
