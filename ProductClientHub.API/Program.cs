@@ -82,16 +82,13 @@ using (var scope = app.Services.CreateScope())
 
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+
     app.UseSwagger();
     app.UseSwaggerUI();
 
-}
-else
-{
+
     app.UseHttpsRedirection(); // só fora do dev
-}
+
 
 app.UseCors("AllowAll");
 
