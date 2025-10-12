@@ -1,32 +1,44 @@
-# See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
+# Este Dockerfile assume que ele está na RAIZ do seu repositório,
+# ao lado do arquivo SLAProjectHub.sln.
 
-# This stage is used when running from VS in fast mode (Default for Debug configuration)
+# Estágio Base (Execução)
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
 
-
-# This stage is used to build the service project
+# Estágio de Build
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
+# Definimos /src como o diretório de trabalho
 WORKDIR /src
-COPY ["ProductClientHub.API/SLAProjectHub.API.csproj", "ProductClientHub.API/"]
-COPY ["ProductClientHub.Communication/SLAProjectHub.Communication.csproj", "ProductClientHub.Communication/"]
-COPY ["ProductClientHub.Exceptions/SLAProjectHub.Exceptions.csproj", "ProductClientHub.Exceptions/"]
-RUN dotnet restore "./ProductClientHub.API/SLAProjectHub.API.csproj"
-COPY . .
-WORKDIR "/src/ProductClientHub.API"
-RUN dotnet build "./SLAProjectHub.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-# This stage is used to publish the service project to be copied to the final stage
+# 1. COPIA SOMENTE OS ARQUIVOS NECESSÁRIOS PARA O RESTORE
+# Copia o arquivo de solução e os arquivos .csproj de cada projeto
+COPY ["SLAProjectHub.sln", "."]
+COPY ["ProductClientHub.API/SLAProjectHub.API.csproj", "ProductClientHub.API/"]
+COPY ["ProductClientHub.Communication/ProductClientHub.Communication.csproj", "ProductClientHub.Communication/"]
+COPY ["ProductClientHub.Exceptions/SLAProjectHub.Exceptions.csproj", "ProductClientHub.Exceptions/"]
+
+# 2. RESTAURAÇÃO: Usa o arquivo .sln para resolver todas as dependências
+RUN dotnet restore "SLAProjectHub.sln"
+
+# 3. COPIA O RESTANTE DO CÓDIGO (incluindo código-fonte)
+COPY . .
+
+# 4. BUILD
+WORKDIR "/src/ProductClientHub.API"
+# Constrói o projeto principal SLAProjectHub.API
+RUN dotnet build "SLAProjectHub.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
+
+# Estágio de Publicação
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./SLAProjectHub.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "SLAProjectHub.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
-# This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
+# Estágio Final
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+# Garante a execução do DLL correto
 ENTRYPOINT ["dotnet", "SLAProjectHub.API.dll"]
