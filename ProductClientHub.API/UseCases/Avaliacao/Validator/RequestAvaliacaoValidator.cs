@@ -12,7 +12,7 @@ namespace SLAProjectHub.API.UseCases.Avaliacao.Validator
             RuleFor(avaliacao => avaliacao.Nome).NotEmpty().WithMessage("O nome não pode ser vazio");
             RuleFor(avaliacao => avaliacao.Descricao).NotEmpty().WithMessage("Você precisa informar uma descrição da nota.");
             RuleFor(avaliacao => avaliacao.Nota).NotEmpty().WithMessage("Você precisa dar uma nota.");
-            RuleFor(avaliacao => avaliacao.ProjetoCodigo).NotEmpty().WithMessage("Você precisa informar o código de um projeto.");
+            RuleFor(avaliacao => avaliacao.AlunoMatricula).NotEmpty().WithMessage("Você precisa informar sua matricula de um projeto.");
 
         }
     }

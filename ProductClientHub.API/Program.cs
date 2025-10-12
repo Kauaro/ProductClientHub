@@ -35,6 +35,7 @@ builder.Services.AddScoped<DeleteUsuarioUseCase>();
 
 builder.Services.AddScoped<GetAllProjetosUseCase>();
 builder.Services.AddScoped<GetByIdProjetoUseCase>();
+builder.Services.AddScoped<GetByCodigoProjeto>();
 builder.Services.AddScoped<RegisterProjetoUseCase>();
 builder.Services.AddScoped<DeleteProjetoUseCase>();
 
@@ -68,9 +69,10 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
-{
+{  
     app.UseSwagger();
     app.UseSwaggerUI();
+
 }
 else
 {

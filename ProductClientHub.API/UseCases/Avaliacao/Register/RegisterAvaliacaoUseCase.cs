@@ -17,17 +17,17 @@ namespace SLAProjectHub.API.UseCases.Avaliacao.Register
             _context = context;
         }
 
-        public ResponseShortAvaliacaoJson Execute(string alunoMatricula, RequestAvaliacaoJson request)
+        public ResponseShortAvaliacaoJson Execute(string projetoCodigo, RequestAvaliacaoJson request)
         {
-            Validate(alunoMatricula, request);
+            Validate(projetoCodigo, request);
 
             var entity = new SLAProjectHub.API.Entities.Avaliacao
             {
                 Nome = request.Nome,
                 Descricao = request.Descricao,
                 Nota = request.Nota,
-                ProjetoCodigo = request.ProjetoCodigo,
-                AlunoMatricula = alunoMatricula
+                ProjetoCodigo = projetoCodigo,
+                AlunoMatricula = request.AlunoMatricula
             };
 
             
@@ -40,16 +40,16 @@ namespace SLAProjectHub.API.UseCases.Avaliacao.Register
             {
                 Id = entity.Id,
                 Nome = entity.Nome,
-                Nota = entity.Nota,
+                Nota = entity.Nota
             };
         }
 
-        private void Validate(string alunoMatricula, RequestAvaliacaoJson request)
+        private void Validate(string projetoCodigo, RequestAvaliacaoJson request)
         {
 
-            var alunoExist = _context.Aluno.Any(aluno => aluno.Matricula == alunoMatricula);
-            if (!alunoExist)
-                throw new NotFoundException("Usuario não existe");
+            var projetoExist = _context.Projeto.Any(projeto => projeto.Codigo == projetoCodigo);
+            if (!projetoExist)
+                throw new NotFoundException("Projeto não existe");
 
             var validator = new RequestAvaliacaoValidator();
             var result = validator.Validate(request);

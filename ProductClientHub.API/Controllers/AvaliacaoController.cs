@@ -31,14 +31,14 @@ namespace SLAProjectHub.API.Controllers
 
             }
 
-            [HttpPost("{alunoMatricula}")]
+            [HttpPost("{projetoCodigo}")]
             [ProducesResponseType(typeof(ResponseShortUsuarioJson), StatusCodes.Status201Created)]
             [ProducesResponseType(typeof(ResponseErrorMessageJson), StatusCodes.Status400BadRequest)]
             public IActionResult Register(
-                [FromRoute] string alunoMatricula,
+                [FromRoute] string projetoCodigo,
                 [FromBody] RequestAvaliacaoJson request)
             {
-                var response = _register.Execute(alunoMatricula, request);
+                var response = _register.Execute(projetoCodigo, request);
                 return Created(string.Empty, response);
             }
         }

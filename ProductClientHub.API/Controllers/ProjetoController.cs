@@ -4,13 +4,10 @@ using ProductClientHub.API.UseCases.Products.Delete;
 using ProductClientHub.API.UseCases.Products.Register;
 using ProductClientHub.Communication.Requests;
 using ProductClientHub.Communication.Responses;
-using SLAProjectHub.API.UseCases.Aluno.GetAll;
-using SLAProjectHub.API.UseCases.Aluno.Register;
 using SLAProjectHub.API.UseCases.Projeto.GetAll;
 using SLAProjectHub.API.UseCases.Projeto.GetById;
 using SLAProjectHub.Communication.Responses.Projeto;
 using SLAProjectHub.Communication.Responses.Usuario;
-using System;
 
 namespace ProductClientHub.API.Controllers
 {
@@ -22,17 +19,20 @@ namespace ProductClientHub.API.Controllers
         private readonly RegisterProjetoUseCase _register;
         private readonly GetAllProjetosUseCase _getAll;
         private readonly GetByIdProjetoUseCase _getById;
+        private readonly GetByCodigoProjeto _getByCodigo;
         public ProjetoController(
             ProductClientHubDbContext context,
             RegisterProjetoUseCase register,
             GetAllProjetosUseCase getall,
-            GetByIdProjetoUseCase getbyid
+            GetByIdProjetoUseCase getbyid,
+            GetByCodigoProjeto getbycodigo
             )
         {
             _context = context;
             _register = register;
             _getAll = getall;
             _getById = getbyid;
+            _getByCodigo = getbycodigo;
         }
 
         [HttpPost("{usuarioId}")]
@@ -79,6 +79,15 @@ namespace ProductClientHub.API.Controllers
         public IActionResult GetById([FromRoute] Guid id)
         {
             var response = _getById.Execute(id);
+            return Ok(response);
+        }
+
+        [HttpGet("{codigo}")]
+        [ProducesResponseType(typeof(ResponseAllProjetoJson), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public IActionResult GetByCodigo([FromRoute] String codigo)
+        {
+            var response = _getByCodigo.Execute(codigo);
             return Ok(response);
         }
     }

@@ -1,20 +1,20 @@
-version: '3.9'
-
+version: "3.9"
 services:
-  sla-api:
-    container_name: sla_projecthub_api
+  api:
     build:
       context: .
-      dockerfile: SLAProjectHub.API/Dockerfile
+      dockerfile: ProductClientHub.API/Dockerfile
+    container_name: sla_api
     ports:
-      - "8080:8080"
+      - 8080:8080
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production
-      - ConnectionStrings__DefaultConnection=Data Source=/data/BDSLA.db
-    volumes:
-      - sla_data:/data
-    restart: always
-
-volumes:
-  sla_data:
-    driver: local
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ConnectionStrings__DefaultConnection="Server=host.docker.internal,1433\SQLEXPRESS01;Database=BDSLA;User
+        Id=teste;Password=Kaua11036374;MultipleActiveResultSets=True;TrustServerCertificate=True"
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
+    networks:
+      - sla_network
+networks:
+  sla_network:
+    driver: bridge
