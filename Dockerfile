@@ -17,6 +17,7 @@ WORKDIR /src
 # Copia o arquivo de solução e os arquivos .csproj de cada projeto
 COPY ["SLAProjectHub.sln", "."]
 COPY ["ProductClientHub.API/SLAProjectHub.API.csproj", "ProductClientHub.API/"]
+# CORREÇÃO FINAL APLICADA AQUI: Usando o nome EXATO que o Docker está procurando.
 COPY ["ProductClientHub.Communication/ProductClientHub.Communication.csproj", "ProductClientHub.Communication/"]
 COPY ["ProductClientHub.Exceptions/SLAProjectHub.Exceptions.csproj", "ProductClientHub.Exceptions/"]
 
