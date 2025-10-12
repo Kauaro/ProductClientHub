@@ -17,9 +17,12 @@ WORKDIR /src
 # Copia o arquivo de solução e os arquivos .csproj de cada projeto
 COPY ["SLAProjectHub.sln", "."]
 COPY ["ProductClientHub.API/SLAProjectHub.API.csproj", "ProductClientHub.API/"]
-# CORREÇÃO FINAL APLICADA AQUI: Usando o nome EXATO que o Docker está procurando.
+# Linha de correção para o nome exato.
 COPY ["ProductClientHub.Communication/ProductClientHub.Communication.csproj", "ProductClientHub.Communication/"]
 COPY ["ProductClientHub.Exceptions/SLAProjectHub.Exceptions.csproj", "ProductClientHub.Exceptions/"]
+
+# Adicionado para forçar quebra de cache.
+RUN echo "Forcing cache break for Communication project path..."
 
 # 2. RESTAURAÇÃO: Usa o arquivo .sln para resolver todas as dependências
 RUN dotnet restore "SLAProjectHub.sln"
