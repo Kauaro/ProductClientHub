@@ -1,4 +1,4 @@
-﻿ using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using ProductClientHub.API.Filters;
 using ProductClientHub.API.Infrastructure;
 using ProductClientHub.API.UseCases.Clients.Delete;
@@ -67,9 +67,23 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// === INÍCIO DO BLOCO DE MIGRAÇÃO AUTOMÁTICA ===
+// Cria um escopo de serviço, obtém o DbContext e aplica as migrações.
+// Isso garante que o BD seja criado no Azure SQL na primeira execução.
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ProductClientHubDbContext>();
+
+    // ATENÇÃO: Se o banco de dados já tiver sido criado, este comando apenas aplicará migrações pendentes.
+    // Se for a primeira execução no Azure, ele criará o BD e as tabelas do zero.
+    dbContext.Database.Migrate();
+}
+// === FIM DO BLOCO DE MIGRAÇÃO AUTOMÁTICA ===
+
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
-{  
+{
     app.UseSwagger();
     app.UseSwaggerUI();
 
