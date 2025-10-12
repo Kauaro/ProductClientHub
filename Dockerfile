@@ -18,7 +18,7 @@ WORKDIR /src
 COPY ["SLAProjectHub.sln", "."]
 COPY ["ProductClientHub.API/SLAProjectHub.API.csproj", "ProductClientHub.API/"]
 # Linha de correção para o nome exato.
-COPY ["ProductClientHub.Communication/ProductClientHub.Communication.csproj", "ProductClientHub.Communication/"]
+COPY ["ProductClientHub.Communication/SLAProjectHub.Communication.csproj", "ProductClientHub.Communication/"]
 COPY ["ProductClientHub.Exceptions/SLAProjectHub.Exceptions.csproj", "ProductClientHub.Exceptions/"]
 
 # Adicionado para forçar quebra de cache.
