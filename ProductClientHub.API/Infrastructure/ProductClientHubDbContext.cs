@@ -19,6 +19,12 @@ namespace ProductClientHub.API.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Mapeamento que força o EF Core a usar o nome exato "Usuario"
+            modelBuilder.Entity<Usuario>()
+                .ToTable("Usuario");
+
+            // Ex: modelBuilder.Entity<Cliente>().ToTable("Cliente");
+
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Aluno>()
