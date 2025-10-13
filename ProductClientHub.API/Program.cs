@@ -67,6 +67,7 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+/*
 // === INÍCIO DO BLOCO DE MIGRAÇÃO AUTOMÁTICA ===
 // Cria um escopo de serviço, obtém o DbContext e aplica as migrações.
 // Isso garante que o BD seja criado no Azure SQL na primeira execução.
@@ -78,7 +79,9 @@ using (var scope = app.Services.CreateScope())
     // Se for a primeira execução no Azure, ele criará o BD e as tabelas do zero.
     dbContext.Database.Migrate();
 }
-// === FIM DO BLOCO DE MIGRAÇÃO AUTOMÁTICA ===
+// === FIM DO BLOCO DE MIGRAÇÃO AUTOMÁTICA === 
+
+*/
 
 
 // Configure the HTTP request pipeline.

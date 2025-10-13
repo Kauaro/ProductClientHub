@@ -73,7 +73,7 @@ namespace ProductClientHub.API.Controllers
             return Ok(response);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("id/{id}")]
         [ProducesResponseType(typeof(ResponseAllProjetoJson), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public IActionResult GetById([FromRoute] Guid id)
@@ -82,7 +82,7 @@ namespace ProductClientHub.API.Controllers
             return Ok(response);
         }
 
-        [HttpGet("{codigo}")]
+        [HttpGet("codigo/{codigo}")]
         [ProducesResponseType(typeof(ResponseAllProjetoJson), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public IActionResult GetByCodigo([FromRoute] String codigo)

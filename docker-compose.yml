@@ -3,7 +3,7 @@ services:
   api:
     build:
       context: .
-      dockerfile: ProductClientHub.API/Dockerfile
+      dockerfile: ./Dockerfile
     container_name: sla_api
     ports:
       - 8080:8080
