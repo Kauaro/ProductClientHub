@@ -10,7 +10,8 @@ using ProductClientHub.API.UseCases.Products.Delete;
 using ProductClientHub.API.UseCases.Products.Register;
 using SLAProjectHub.API.UseCases.Aluno.GetAll;
 using SLAProjectHub.API.UseCases.Aluno.Register;
-using SLAProjectHub.API.UseCases.Avaliacao.GetAll;
+using SLAProjectHub.API.UseCases.Avaliacao.GetByCodigo;
+using SLAProjectHub.API.UseCases.Avaliacao.GetByMatricula;
 using SLAProjectHub.API.UseCases.Avaliacao.Register;
 using SLAProjectHub.API.UseCases.Projeto.GetAll;
 using SLAProjectHub.API.UseCases.Projeto.GetById;
@@ -45,7 +46,8 @@ builder.Services.AddScoped<ProjetoCodigoService>();
 builder.Services.AddScoped<RegisterAluno>();
 builder.Services.AddScoped<GetAllAluno>();
 
-builder.Services.AddScoped<GetAllAvaliacaoUseCase>();
+builder.Services.AddScoped<GetAvaliacaoByMatricula>();
+builder.Services.AddScoped<GetAvaliacaoByCodigo>();
 builder.Services.AddScoped<RegisterAvaliacaoUseCase>();
 
 
