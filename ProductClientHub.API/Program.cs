@@ -8,6 +8,7 @@ using ProductClientHub.API.UseCases.Clients.Register;
 using ProductClientHub.API.UseCases.Clients.Update;
 using ProductClientHub.API.UseCases.Products.Delete;
 using ProductClientHub.API.UseCases.Products.Register;
+using SLAProjectHub.API.UseCases;
 using SLAProjectHub.API.UseCases.Aluno.GetAll;
 using SLAProjectHub.API.UseCases.Aluno.Register;
 using SLAProjectHub.API.UseCases.Avaliacao.GetByCodigo;
@@ -41,6 +42,8 @@ builder.Services.AddScoped<RegisterProjetoUseCase>();
 builder.Services.AddScoped<DeleteProjetoUseCase>();
 
 builder.Services.AddScoped<ProjetoCodigoService>();
+
+builder.Services.AddSingleton<PasswordService>();
 
 
 builder.Services.AddScoped<RegisterAluno>();

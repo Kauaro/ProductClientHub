@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProductClientHub.API.Infrastructure;
 using ProductClientHub.Communication.Responses;
+using SLAProjectHub.API.Entities;
+using SLAProjectHub.API.UseCases;
 using SLAProjectHub.API.UseCases.Aluno.GetAll;
 using SLAProjectHub.API.UseCases.Aluno.Register;
 using SLAProjectHub.Communication.Requests;
@@ -39,14 +41,23 @@ namespace SLAProjectHub.API.Controllers
         public IActionResult Login([FromBody] RequestLoginJson request)
         {
             var aluno = _context.Aluno
-                .FirstOrDefault(u => u.Matricula == request.Matricula && u.Senha == request.Senha);
+                .FirstOrDefault(u => u.Matricula == request.Matricula);
 
             if (aluno == null)
             {
                 return Unauthorized(new { message = "Matrícula ou senha inválidos." });
             }
 
-            // Retorna dados importantes do usuário
+            var passwordService = new PasswordService();
+
+            var senhaCorreta = passwordService.VerifyPassword(request.Senha, aluno.Senha);
+
+            if (!senhaCorreta)
+            {
+                return Unauthorized(new { message = "Matrícula ou senha inválidos." });
+            }
+
+
             return Ok(new
             {
                 message = "Login realizado com sucesso!",

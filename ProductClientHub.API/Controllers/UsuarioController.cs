@@ -11,6 +11,7 @@ using ProductClientHub.Exceptions.ExceptionBase;
 using SLAProjectHub.Communication.Requests;
 using SLAProjectHub.Communication.Responses;
 using SLAProjectHub.Communication.Responses.Usuario;
+using SLAProjectHub.API.UseCases;
 
 namespace ProductClientHub.API.Controllers
 {
@@ -94,14 +95,23 @@ namespace ProductClientHub.API.Controllers
         public IActionResult Login([FromBody] RequestLoginJson request)
         {
             var usuario = _context.Usuario
-                .FirstOrDefault(u => u.Matricula == request.Matricula && u.Senha == request.Senha);
+                .FirstOrDefault(u => u.Matricula == request.Matricula);
 
             if (usuario == null)
             {
                 return Unauthorized(new { message = "Matrícula ou senha inválidos." });
             }
 
-            // Retorna dados importantes do usuário
+            var passwordService = new PasswordService();
+
+
+            var senhaCorreta = passwordService.VerifyPassword(request.Senha, usuario.Senha);
+
+            if (!senhaCorreta)
+                return Unauthorized(new { message = "Matrícula ou senha inválidos." });
+
+
+
             return Ok(new
             {
                 message = "Login realizado com sucesso!",

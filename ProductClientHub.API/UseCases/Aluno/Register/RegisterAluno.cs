@@ -9,10 +9,16 @@ namespace SLAProjectHub.API.UseCases.Aluno.Register
 {
     public class RegisterAluno
     {
+
+
         private readonly ProductClientHubDbContext _context;
-        public RegisterAluno(ProductClientHubDbContext context)
+        private readonly PasswordService _passwordService;
+
+
+        public RegisterAluno(ProductClientHubDbContext context, PasswordService passwordService)
         {
             _context = context;
+            _passwordService = passwordService;
         }
 
         public ResponseShortAlunoJson Execute(RequestAlunoJson request)
@@ -20,12 +26,16 @@ namespace SLAProjectHub.API.UseCases.Aluno.Register
             try
             {
                 Validate(request);
+
+                var senhaHash = _passwordService.HashPassword(request.Senha);
+
+
                 var entity = new SLAProjectHub.API.Entities.Aluno
                 {
                     Nome = request.Nome,
                     Matricula = request.Matricula,
                     Email = request.Email,
-                    Senha = request.Senha
+                    Senha = senhaHash
                 };
                 _context.Aluno.Add(entity);
                 _context.SaveChanges();
