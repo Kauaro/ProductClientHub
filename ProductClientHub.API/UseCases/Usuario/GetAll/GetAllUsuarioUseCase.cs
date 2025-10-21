@@ -25,6 +25,7 @@ namespace ProductClientHub.API.UseCases.Clients.GetAll
                     Id = u.Id,
                     Matricula = u.Matricula,
                     Nome = u.Nome,
+                    Email = u.Email,
                     NivelAcesso = u.NivelAcesso,
                 }).ToList()
             };
