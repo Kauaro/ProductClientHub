@@ -11,6 +11,7 @@ using ProductClientHub.API.UseCases.Products.Register;
 using SLAProjectHub.API.UseCases;
 using SLAProjectHub.API.UseCases.Aluno.GetAll;
 using SLAProjectHub.API.UseCases.Aluno.Register;
+using SLAProjectHub.API.UseCases.Aluno.Update;
 using SLAProjectHub.API.UseCases.Avaliacao.GetByCodigo;
 using SLAProjectHub.API.UseCases.Avaliacao.GetByMatricula;
 using SLAProjectHub.API.UseCases.Avaliacao.Register;
@@ -18,6 +19,7 @@ using SLAProjectHub.API.UseCases.Projeto.GetAll;
 using SLAProjectHub.API.UseCases.Projeto.GetById;
 using SLAProjectHub.API.UseCases.Projeto.GetByIdUsuario;
 using SLAProjectHub.API.UseCases.Projeto.Register;
+using SLAProjectHub.API.UseCases.Projeto.Update;
 using System;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -42,6 +44,7 @@ builder.Services.AddScoped<GetByIdUsuarioProjetoUseCase>();
 builder.Services.AddScoped<GetByCodigoProjeto>();
 builder.Services.AddScoped<RegisterProjetoUseCase>();
 builder.Services.AddScoped<DeleteProjetoUseCase>();
+builder.Services.AddScoped<UpdateProjetoUseCase>();
 
 builder.Services.AddScoped<ProjetoCodigoService>();
 
@@ -50,6 +53,8 @@ builder.Services.AddSingleton<PasswordService>();
 
 builder.Services.AddScoped<RegisterAluno>();
 builder.Services.AddScoped<GetAllAluno>();
+builder.Services.AddScoped<UpdateAlunoUseCase>();
+
 
 builder.Services.AddScoped<GetAvaliacaoByMatricula>();
 builder.Services.AddScoped<GetAvaliacaoByCodigo>();

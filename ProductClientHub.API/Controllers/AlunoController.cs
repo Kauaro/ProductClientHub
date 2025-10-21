@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProductClientHub.API.Infrastructure;
+using ProductClientHub.Communication.Requests;
 using ProductClientHub.Communication.Responses;
 using SLAProjectHub.API.Entities;
 using SLAProjectHub.API.UseCases;
 using SLAProjectHub.API.UseCases.Aluno.GetAll;
 using SLAProjectHub.API.UseCases.Aluno.Register;
+using SLAProjectHub.API.UseCases.Aluno.Update;
 using SLAProjectHub.Communication.Requests;
 using SLAProjectHub.Communication.Responses.Aluno;
 
@@ -17,15 +19,18 @@ namespace SLAProjectHub.API.Controllers
         private readonly ProductClientHubDbContext _context;
         private readonly RegisterAluno _register;
         private readonly GetAllAluno _getAll;
+        private readonly UpdateAlunoUseCase _update;
         public AlunoController(
             ProductClientHubDbContext context,
             RegisterAluno register,
-            GetAllAluno getall
+            GetAllAluno getall,
+            UpdateAlunoUseCase update
             )
         {
             _context = context;
             _register = register;
             _getAll = getall;
+            _update = update;
         }
 
         [HttpPost]
@@ -65,6 +70,8 @@ namespace SLAProjectHub.API.Controllers
                 nome = aluno.Nome,
                 matricula = aluno.Matricula,
                 email = aluno.Email,
+                curso = aluno.Curso,
+                periodo = aluno.Periodo,
                 avaliacoes = new string[] { }
             });
         }
@@ -78,6 +85,16 @@ namespace SLAProjectHub.API.Controllers
                 return NoContent();
 
             return Ok(response);
+        }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ResponseErrorMessageJson), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ResponseErrorMessageJson), StatusCodes.Status404NotFound)]
+        public IActionResult Update([FromRoute] Guid id, [FromBody] RequestAlunoJson request)
+        {
+            _update.Execute(id, request);
+            return NoContent();
         }
     }
 }

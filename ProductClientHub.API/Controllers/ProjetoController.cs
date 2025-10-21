@@ -7,6 +7,7 @@ using ProductClientHub.Communication.Responses;
 using SLAProjectHub.API.UseCases.Projeto.GetAll;
 using SLAProjectHub.API.UseCases.Projeto.GetById;
 using SLAProjectHub.API.UseCases.Projeto.GetByIdUsuario;
+using SLAProjectHub.API.UseCases.Projeto.Update;
 using SLAProjectHub.Communication.Responses.Projeto;
 using SLAProjectHub.Communication.Responses.Usuario;
 
@@ -22,13 +23,16 @@ namespace ProductClientHub.API.Controllers
         private readonly GetByIdProjetoUseCase _getById;
         private readonly GetByIdUsuarioProjetoUseCase _getByIdUsuario;
         private readonly GetByCodigoProjeto _getByCodigo;
+        private readonly UpdateProjetoUseCase _update;
         public ProjetoController(
             ProductClientHubDbContext context,
             RegisterProjetoUseCase register,
             GetAllProjetosUseCase getall,
             GetByIdProjetoUseCase getbyid,
             GetByIdUsuarioProjetoUseCase getbyidusuario,
-            GetByCodigoProjeto getbycodigo
+            GetByCodigoProjeto getbycodigo,
+            UpdateProjetoUseCase update
+
             )
         {
             _context = context;
@@ -37,6 +41,7 @@ namespace ProductClientHub.API.Controllers
             _getById = getbyid;
             _getByIdUsuario = getbyidusuario;
             _getByCodigo = getbycodigo;
+            _update = update;
         }
 
         [HttpPost("{usuarioId}")]
@@ -107,6 +112,16 @@ namespace ProductClientHub.API.Controllers
         {
             var response = _getByCodigo.Execute(codigo);
             return Ok(response);
+        }
+
+        [HttpPut("editar/{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ResponseErrorMessageJson), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ResponseErrorMessageJson), StatusCodes.Status404NotFound)]
+        public IActionResult Update([FromRoute] Guid id, [FromBody] RequestProjetoJson request)
+        {
+            _update.Execute(id, request);
+            return NoContent();
         }
     }
 }
