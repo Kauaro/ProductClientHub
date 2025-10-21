@@ -29,6 +29,7 @@ namespace SLAProjectHub.API.UseCases.Projeto.GetAll
                     Id = u.Id,
                     Nome = u.Nome,
                     Tema = u.Tema,
+                    Codigo = u.Codigo,  
                     UsuarioNome = u.Usuario.Nome
                 }).ToList()
             };
