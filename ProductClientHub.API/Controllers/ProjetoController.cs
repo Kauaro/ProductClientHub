@@ -6,6 +6,7 @@ using ProductClientHub.Communication.Requests;
 using ProductClientHub.Communication.Responses;
 using SLAProjectHub.API.UseCases.Projeto.GetAll;
 using SLAProjectHub.API.UseCases.Projeto.GetById;
+using SLAProjectHub.API.UseCases.Projeto.GetByIdUsuario;
 using SLAProjectHub.Communication.Responses.Projeto;
 using SLAProjectHub.Communication.Responses.Usuario;
 
@@ -19,12 +20,14 @@ namespace ProductClientHub.API.Controllers
         private readonly RegisterProjetoUseCase _register;
         private readonly GetAllProjetosUseCase _getAll;
         private readonly GetByIdProjetoUseCase _getById;
+        private readonly GetByIdUsuarioProjetoUseCase _getByIdUsuario;
         private readonly GetByCodigoProjeto _getByCodigo;
         public ProjetoController(
             ProductClientHubDbContext context,
             RegisterProjetoUseCase register,
             GetAllProjetosUseCase getall,
             GetByIdProjetoUseCase getbyid,
+            GetByIdUsuarioProjetoUseCase getbyidusuario,
             GetByCodigoProjeto getbycodigo
             )
         {
@@ -32,6 +35,7 @@ namespace ProductClientHub.API.Controllers
             _register = register;
             _getAll = getall;
             _getById = getbyid;
+            _getByIdUsuario = getbyidusuario;
             _getByCodigo = getbycodigo;
         }
 
@@ -81,6 +85,20 @@ namespace ProductClientHub.API.Controllers
             var response = _getById.Execute(id);
             return Ok(response);
         }
+
+        [HttpGet("usuario/{usuarioId}")]
+        [ProducesResponseType(typeof(IEnumerable<ResponseProjetoJson>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> GetByIdUsuario([FromRoute] Guid usuarioId)
+        {
+            var response = await _getByIdUsuario.Execute(usuarioId);
+
+            if (response == null || !response.Any())
+                return NoContent();
+
+            return Ok(response);
+        }
+
 
         [HttpGet("codigo/{codigo}")]
         [ProducesResponseType(typeof(ResponseAllProjetoJson), StatusCodes.Status200OK)]

@@ -34,6 +34,7 @@ namespace SLAProjectHub.API.UseCases.Projeto.GetById
                 Descricao = entity.Descricao,
                 Tema = entity.Tema,
                 Aluno = entity.Aluno,
+                Codigo = entity.Codigo,
                 UsuarioNome = entity.Usuario.Nome
             };
             }

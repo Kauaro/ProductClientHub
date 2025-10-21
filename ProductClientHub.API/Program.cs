@@ -16,6 +16,7 @@ using SLAProjectHub.API.UseCases.Avaliacao.GetByMatricula;
 using SLAProjectHub.API.UseCases.Avaliacao.Register;
 using SLAProjectHub.API.UseCases.Projeto.GetAll;
 using SLAProjectHub.API.UseCases.Projeto.GetById;
+using SLAProjectHub.API.UseCases.Projeto.GetByIdUsuario;
 using SLAProjectHub.API.UseCases.Projeto.Register;
 using System;
 
@@ -37,6 +38,7 @@ builder.Services.AddScoped<DeleteUsuarioUseCase>();
 
 builder.Services.AddScoped<GetAllProjetosUseCase>();
 builder.Services.AddScoped<GetByIdProjetoUseCase>();
+builder.Services.AddScoped<GetByIdUsuarioProjetoUseCase>();
 builder.Services.AddScoped<GetByCodigoProjeto>();
 builder.Services.AddScoped<RegisterProjetoUseCase>();
 builder.Services.AddScoped<DeleteProjetoUseCase>();
