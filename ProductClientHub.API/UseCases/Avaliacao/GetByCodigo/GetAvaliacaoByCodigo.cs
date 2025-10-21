@@ -34,6 +34,7 @@ namespace SLAProjectHub.API.UseCases.Avaliacao.GetByCodigo
                 AlunoMatricula = entity.Aluno.Matricula,
                 Descricao = entity.Descricao,
                 Nota = entity.Nota,
+                ProjetoCodigo = entity.Projeto.Codigo,
                 ProjetoNome = entity.Projeto.Nome
             });
         }

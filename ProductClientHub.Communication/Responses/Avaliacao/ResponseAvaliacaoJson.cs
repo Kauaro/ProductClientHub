@@ -7,6 +7,7 @@
         public string Descricao { get; set; } = string.Empty;
         public int Nota { get; set; } = 0;
         public string AlunoMatricula { get; set; } = string.Empty;
+        public string ProjetoCodigo { get; set; } = string.Empty;
         public string ProjetoNome { get; set; } = string.Empty;
     }
 }
