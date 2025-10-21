@@ -95,20 +95,20 @@ namespace ProductClientHub.API.Controllers
         public IActionResult Login([FromBody] RequestLoginJson request)
         {
             var usuario = _context.Usuario
-                .FirstOrDefault(u => u.Matricula == request.Matricula);
+                .FirstOrDefault(u => u.Matricula == request.Matricula && u.Senha == request.Senha);
 
             if (usuario == null)
             {
                 return Unauthorized(new { message = "Matrícula ou senha inválidos." });
             }
-
+            /*
             var passwordService = new PasswordService();
 
 
-            var senhaCorreta = passwordService.VerifyPassword(request.Senha, usuario.Senha);
+            var senhaCorreta = passwordService.VerifyPassword(request.Senha, usuario.Senha); 
 
             if (!senhaCorreta)
-                return Unauthorized(new { message = "Matrícula ou senha inválidos." });
+                return Unauthorized(new { message = "Matrícula ou senha inválidos." }); */
 
 
 
