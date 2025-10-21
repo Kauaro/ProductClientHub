@@ -9,6 +9,7 @@ using ProductClientHub.API.UseCases.Clients.Update;
 using ProductClientHub.API.UseCases.Products.Delete;
 using ProductClientHub.API.UseCases.Products.Register;
 using SLAProjectHub.API.UseCases;
+using SLAProjectHub.API.UseCases.Aluno.Delete;
 using SLAProjectHub.API.UseCases.Aluno.GetAll;
 using SLAProjectHub.API.UseCases.Aluno.Register;
 using SLAProjectHub.API.UseCases.Aluno.Update;
@@ -54,6 +55,7 @@ builder.Services.AddSingleton<PasswordService>();
 builder.Services.AddScoped<RegisterAluno>();
 builder.Services.AddScoped<GetAllAluno>();
 builder.Services.AddScoped<UpdateAlunoUseCase>();
+builder.Services.AddScoped<DeleteAlunoUseCase>();
 
 
 builder.Services.AddScoped<GetAvaliacaoByMatricula>();

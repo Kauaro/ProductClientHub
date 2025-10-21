@@ -4,6 +4,7 @@ using ProductClientHub.Communication.Requests;
 using ProductClientHub.Communication.Responses;
 using SLAProjectHub.API.Entities;
 using SLAProjectHub.API.UseCases;
+using SLAProjectHub.API.UseCases.Aluno.Delete;
 using SLAProjectHub.API.UseCases.Aluno.GetAll;
 using SLAProjectHub.API.UseCases.Aluno.Register;
 using SLAProjectHub.API.UseCases.Aluno.Update;
@@ -20,17 +21,20 @@ namespace SLAProjectHub.API.Controllers
         private readonly RegisterAluno _register;
         private readonly GetAllAluno _getAll;
         private readonly UpdateAlunoUseCase _update;
+        private readonly DeleteAlunoUseCase _delete;
         public AlunoController(
             ProductClientHubDbContext context,
             RegisterAluno register,
             GetAllAluno getall,
-            UpdateAlunoUseCase update
+            UpdateAlunoUseCase update, 
+            DeleteAlunoUseCase delete
             )
         {
             _context = context;
             _register = register;
             _getAll = getall;
             _update = update;
+            _delete = delete;
         }
 
         [HttpPost]
@@ -94,6 +98,15 @@ namespace SLAProjectHub.API.Controllers
         public IActionResult Update([FromRoute] Guid id, [FromBody] RequestAlunoJson request)
         {
             _update.Execute(id, request);
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ResponseErrorMessageJson), StatusCodes.Status404NotFound)]
+        public IActionResult Delete([FromRoute] Guid id)
+        {
+            _delete.Execute(id);
             return NoContent();
         }
     }
